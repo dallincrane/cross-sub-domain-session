@@ -12,7 +12,7 @@ const localStrategyConfig = {
 passport.use(new LocalStrategy(localStrategyConfig, (email, password, done) => {
   knex('person')
     .where({ email })
-    .select('id', 'name', 'email', 'email_validated', 'password')
+    .select('id', 'name', 'email', 'password')
     .then(result => {
       const person = result[0]
       if (!person || !bcrypt.compareSync(password, person.password)) {
@@ -27,7 +27,7 @@ passport.use(new LocalStrategy(localStrategyConfig, (email, password, done) => {
 passport.deserializeUser((id, done) => {
   knex('person')
     .where({ id })
-    .select('id', 'name', 'email', 'email_validated')
+    .select('id', 'name', 'email')
     .then(result => done(null, result[0]))
     .catch(err => done(err))
 })
